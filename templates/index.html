@@ -1,0 +1,1244 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Scankin</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css"/>
+    <!-- Third party plugin CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet"/>
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/css1.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js"></script>
+
+  </head>
+  <body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">
+        <img src="{% static 'images/scankin-CJCUIM.png' %}" height="75px"/>
+        </a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto my-2 my-lg-0">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" id="Services" href="#servicesPage">Scan</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#mapPage">Map</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#graphPage">Graph</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#newsPage">News</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <header class="masthead">
+      <div class="container h-100">
+        <div class="row h-100 align-items-center justify-content-center text-center">
+          <div class="col-lg-10 align-self-end">
+            <h1 class="text-uppercase text-white font-weight-bold">Welcome to Scankin</h1>
+            <hr class="divider my-4" />
+          </div>
+          <div class="col-lg-8 align-self-baseline">
+            <p class="text-white-75 font-weight-light mb-5">Let's see what Scankin can do</p>
+            <a class="btn btn-primary btn-xl js-scroll-trigger" href="#servicesPage">Get to start</a>
+          </div>
+        </div>
+      </div>
+    </header>
+<!--Services-->
+    <section class="page-section bg-primary" id="servicesPage">
+        <div class="container">
+            <div class="row justify-content-center col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-12" style="display:inline">
+                    <h2 class="title-h2">請上傳需辨識部位</h2>
+                    <form id="uploadForm" method="post" enctype="multipart/form-data" action="predictImage" target="_self">
+                    {% csrf_token %}
+                    <img class="" id="uploadImg" style="display:none;"/>
+                    <img src={{filePathName}} alt="images" id="showimg" style="width:95%;height:500px;border: 3px solid #CE836C;border-radius: 15px;" /><br>
+                    {{filePathName}}<br>
+                    <label class="btn btn-blue col-lg-6 col-sm-12" id="uploadBtn">
+                        <input type="file" id="file" name="filePath" style="display:none;" accept="image/*"/>
+                        <i class="fas fa-upload"></i> &nbsp; Upload File
+                    <!-- -->
+                    </label>
+                    <!-- <label class="btn btn-blue col-lg-6 col-sm-12" id="cameraBtn">
+                        <input type="button" id="camera" capture="camera" style="display:none;" class="" />
+                        <i class="fas fa-camera"></i> &nbsp; Camera-->
+                    <!-- 相機問題尚未解決 -->
+                    </label><br>
+                    <label class="btn btn-danger col-lg-6 col-sm-12" id="nextBtn">
+                        <input type="submit" id="" style="display:none;" class=""/>
+                        <i class="fas fa-play"></i> &nbsp; NEXT
+                    </label><br>
+                    </form>
+                </div>
+            <div class="col-lg-6 col-sm-12" id="testR">
+            {% comment %} style="display:inline;visibility:hidden" id="resultChoose" {% endcomment %}
+                <h2 class="title-h2">可能病症為</h2>
+                <ul>
+                    <li class="title-h3">可點選以下症狀察看處理方式</li>
+                </ul>
+                <div class="resultBox" id="resultBox1">{{predictedLabel}}
+                    <i class="resultBoxPercent" id="resultBox1Percent">{{pred2f}}%</i>
+                    <!-- 這邊是載入疾病百分比資料 -->
+                </div>
+                <div class="resultBox" id="resultBox2">{{k1}}
+                    <i class="resultBoxPercent" id="resultBox1Percent">{{pk1}}%</i>
+                </div>
+                <div class="resultBox" id="resultBox3">{{k2}}
+                    <i class="resultBoxPercent" id="resultBox1Percent">{{pk2}}%</i>
+                </div>
+                <div class="resultBox" id="resultBox4">{{k3}}
+                    <i class="resultBoxPercent" id="resultBox1Percent">{{pk3}}%</i>
+                </div>
+            </div>
+            <div class="col-lg-6" style="display:inline; display:none" id="resultDiv">
+                <h2 class="title-h2">辨識結果</h2>
+                <div class="resultBoxProcess" style="font-size:24px"></div>
+                <div class="resultBoxOther">
+                    <h2 class="title-h2">外觀症狀</h2>
+                    <div>
+                        <p class="diseaseDescription">
+                            
+                            <!-- 等資料庫建置完畢即可載入 -->
+                        </p>
+                    </div>
+                    <h2 class="title-h2">建議處理</h2>
+                    <div>
+                        <p class="diseaseSolve">
+                            
+                            <!-- 等資料庫建置完畢即可載入 -->
+                        </p>
+                    </div>
+                </div>
+                <label class="btn btn-danger col-lg-6 col-sm-12" id="backBtn">
+                    <input type="button" id="" style="display:none;" class="" />
+                    <i class="fas fa-reply"></i> &nbsp; BACK
+                </label><br>
+            </div>
+        </div>
+        <script>
+            $(".resultBox").click(function() {
+                //$("#resultChoose").hide();
+                $("#testR").hide();
+                detailed = $(this).text();
+                //console.log(detailed);
+                detailedProcessNum = detailed.substring(0, 4); //<!--這邊是要提取前四個字-->
+                //console.log(detailedProcessNum);
+                //detailedProcess = detailed.replace(detailedProcessNum, "");
+                //console.log(detailedProcess);
+                $(".resultBoxProcess").text(detailedProcessNum);
+                $("#resultDiv").show();
+                $("#resultDiv").css("visibility", "inherit");
+
+                var diseaseDescription=[], 
+                    diseaseSolve=[],
+                    diseaseName=[];
+
+                $.ajax({
+                    url: "scan/",
+                    method: 'POST',
+                    data: {
+                        detailedProcessNum: detailedProcessNum,
+                    },
+                    //async: false,
+                    success: function(response) {
+                        var n = response.split(",");
+                        if (response == '') {
+                            $("#hospitalList").html("此區暫時沒有資料！");
+                        } else {
+                            for (var i = 0; n.length > i; i = i+4) {
+                                diseaseDescription.push(n[i+3].replace(/"/g,""));
+                                diseaseSolve.push(n[i+2].replace(/"/g,""));
+                                diseaseName.push(n[i+1].replace(/"/g,""));
+                                
+                                
+                        }
+                        $(".diseaseDescription").html(diseaseDescription);
+                        $(".diseaseSolve").html(diseaseSolve);
+                        $(".resultBoxProcess").html(diseaseName);
+                    }
+                },
+                error: function(textStatus) {
+                    console.log(" error!");
+                }
+            })
+
+
+            });
+            $("#backBtn").click(function() {
+                $("#resultDiv").hide();
+                $("#testR").show();
+                $("#testR").css("visibility", "inherit");
+
+            })
+            $("#nextBtn").click(function() {
+                $("#resultChoose").css("visibility", "inherit");
+            });
+        </script>
+
+    </section>
+    <section class="page-section" id="mapPage">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="mt-0 mapTitle">地圖</h2>
+                <hr class="divider my-4" />
+                <p class="text-muted mapSubtitle">您可以搜尋離您最近的診所以利看診</p>
+                <p class="text-muted mapSubtitle">使用滑鼠滾輪可以移動縮放地圖位置</p>
+                <p class="text-muted mb-5 mapSubtitle">雙擊可查詢該區資料</p>
+            </div>
+        </div>
+        <div id="chartMap" class="col-lg-5 col-sm-11 col-md-11"></div>
+        <div class="hospital col-lg-6 col-sm-11 col-md-11">
+            <h4 class="text-muted" id="district">請點選各區</h4>
+            <div class="hospitalBox">
+                <table id="hospitalList"> </table>
+            </div>
+        </div>
+        <script>
+            //            var myChart = echarts.init(document.getElementById('main'));
+            var taiwan = "{% static 'County/Taiwan.json' %}";
+            var app = {};
+            // 定義 echarts 物件自訂的 extendsMap() 函式
+            // 第一個參數（id）：繪製區域的元素 id
+            // 第二個參數（opt）：繪製時的屬性設定
+            echarts.extendsMap = function(id, opt) {
+                // init() 函式：建立一個 echarts 實例
+                // 它的參數是一個實例的容器。一般是一個 div 元素
+                var chart = this.init(document.getElementById(id));
+
+                // 記錄目前用來繪製的 geoJson
+                var curGeoJson = {};
+
+                // 記錄目前位於哪個縣市
+                var city = [];
+
+                // 設定用來繪製各區域的 geojson 檔
+                var cityMap = {
+                    "彰化縣": "{% static 'County/Changhua.json' %}",
+                    "嘉義縣": "{% static 'County/Chiayi.json' %}",
+                    "嘉義市": "{% static 'County/ChiayiCity.json' %}",
+                    "新竹縣": "{% static 'County/Hsinchu.json' %}",
+                    "新竹市": "{% static 'County/HsinchuCity.json' %}",
+                    "花蓮縣": "{% static 'County/Hualien.json' %}",
+                    "高雄市": "{% static 'County/Kaohsiung.json' %}",
+                    "基隆市": "{% static 'County/Keelung.json' %}",
+                    "金門縣": "{% static 'County/Kinmen.json' %}",
+                    "連江縣": "{% static 'County/Lienchiang.json' %}",
+                    "苗栗縣": "{% static 'County/Miaoli.json' %}",
+                    "南投縣": "{% static 'County/Nantou.json' %}",
+                    "新北市": "{% static 'County/NewTaipei.json' %}",
+                    "澎湖縣": "{% static 'County/Penghu.json' %}",
+                    "屏東縣": "{% static 'County/Pingtung.json' %}",
+                    "臺中市": "{% static 'County/Taichung.json' %}",
+                    "臺南市": "{% static 'County/Tainan.json' %}",
+                    "臺北市": "{% static 'County/Taipei.json' %}",
+                    "臺東縣": "{% static 'County/Taitung.json' %}",
+                    "桃園市": "{% static 'County/Taoyuan.json' %}",
+                    "宜蘭縣": "{% static 'County/Yilan.json' %}",
+                    "雲林縣": "{% static 'County/Yunlin.json' %}"
+                };
+
+
+                // 定義標記點要使用的顏色
+                var levelColorMap = {
+                    '1': 'rgba(241, 109, 115, .8)',
+                    '2': 'rgba(255, 235, 59, .7)',
+                    '3': 'rgba(147, 235, 248, 1)'
+                };
+
+                // 設定繪製時的屬性選項值
+                var defaultOpt = {
+                    mapName: '台灣', // 要使用 & 繪製的地圖名稱
+                    goDown: false, // 是否下鐵
+                    bgColor: '#404a59', // 畫布背景顏色
+                    activeArea: [], // 區域高亮,同 echarts 配置項
+                    data: [],
+                    // 下鐵後的回呼函式（點擊的地圖名、實例對象option、實例對象）
+                    // 此目的能提供：當點擊某一區時，可以利用此回呼函式去顯示該區的地圖
+                    callback: function(name, option, instance) {}
+                };
+
+                // 如果有傳入指定的屬性選項，則將它併入「預設選項」（defaultOpt）中
+                if (opt) {
+                    // extend() 函式：會將第二個參數的資料，合併至第一個參數
+                    // 若有重覆的屬性，其值將會被覆蓋掉（請看下面的範例）
+                    opt = this.util.extend(defaultOpt, opt);
+                    // console.log(opt);
+                    // 上述顯示的結果為.....（在 aa 中 a2 的值將被覆蓋成 444）
+                    // {'a1': '111', 'a2': '444', 'b1': '333'};
+                };
+
+                // 建立地圖被點擊時的層級索引
+                // 初始狀態，陣列中僅有「台南」一個項目
+                // 當點擊某一區，例如「安平區」，則陣列會有「台南」和「安平區」二項
+                var areaName = [opt.mapName];
+
+                // 用來記錄被點選的層級索引
+                // 初始值是 0，代表初始狀態是「台南市」地圖
+                var idx = 0;
+
+                // 設定用來顯示「左上方導覽文字資訊」的位置
+                var pos = {
+                    // 用來設定新區域文字加入左上方導覽資訊的平移位置
+                    leftPlus: 115,
+                    leftCur: 150,
+                    left: 198, // 用來設定初始畫面的左上方導覽資訊的位置
+                    top: 50 // 用來設定初始畫面的左上方導覽資訊的位置
+                };
+
+                // 設定「左上方導覽文字資訊」，各層級之間的「〉」符號
+                var lineAmongLevel = [
+                    [0, 0],
+                    [8, 11],
+                    [0, 22]
+                ];
+
+                // 設定「左上方導覽文字資訊」的樣式
+                var style = {
+                    font: '18px "Microsoft YaHei", sans-serif',
+                    textColor: '#eee',
+                    lineColor: 'rgba(147, 235, 248, .8)'
+                };
+
+                var handleEvents = {
+                    /**
+                     * i：實例物件
+                     * o：option（配置選項）
+                     * n：地圖名稱
+                     **/
+                    resetOption: function(i, o, n) { // 此函式用來重新設定繪製選項的值
+                        // 建立一個「左上方導覽文字資訊」的物件
+                        var breadcrumb = this.createBreadcrumb(n);
+                        // 尋找被點選的區域，是否在記錄「左上方導覽文字」的陣列中
+                        // 如果找不到，indexOf() 將會回傳 -1
+                        var j = areaName.indexOf(n);
+                        var l = o.graphic.length;
+                        if (j < 0) { // 此情況代表，被點選的區域目前不在導覽文字的陣列中
+                            // 將新建立的「導覽文字資訊」物件加入
+                            // 在初始狀態（i.e. 呈現第一層地圖時），graphic 陣列僅有二項資料
+                            // (1) 第一項是導覽文字的上下線條，以及它的顯示位置 & 長度、、、
+                            // (2) 第二項是第一層地圖的中英文名稱，以及它的文字大小 & 顯示位置、、、
+                            // 若點選某一區域，呈現出第二層地圖時，graphic 陣列將會再加一項資料，亦即
+                            // (3) 第三項是第二層地圖的中英文名稱，以及它的文字大小 & 顯示位置、、、
+                            o.graphic.push(breadcrumb);
+                            // 設定畫面左上方導覽文字資訊的上方線條長度
+                            o.graphic[0].children[0].shape.x2 = 145;
+                            // 設定畫面左上方導覽文字資訊的下方線條長度
+                            o.graphic[0].children[1].shape.x2 = 145;
+                            //                            console.log(l, o.graphic);
+                            if (o.graphic.length > 2) { // 此條件成立，亦即點選了第二層地圖
+                                // 利用 for 迴圈，逐一檢查那些標記點剛好落在被點選的區域中
+                                // opt.data：記錄被標記點的相關資訊
+                                for (var x = 0; x < opt.data.length; x++) {
+                                    // 判斷被點選的區域（n）是否等於標記點的名稱（name）
+                                    // （因為目前每一區域僅一標記點，且其 name 剛好是該區域的名稱）
+                                    if (n === opt.data[x].name) {
+                                        // 取得該標記點的資訊，並將其設定為 series 標記時的資料集（data）
+                                        o.series[0].data = handleEvents.initSeriesData([opt.data[x]]);
+                                        //                                        console.log(o);
+                                        break;
+                                    } else
+                                        // 若找不到，則將 series 標記的資料集（data）設為空值
+                                        o.series[0].data = [];
+                                }
+                            };
+                            // 將被點選的區域加入地圖導覽資訊（areaName）的陣列中
+                            areaName.push(n);
+                            //                            console.log(areaName);
+                            // 陣列的索引值加 1
+                            idx++;
+                        } else { // 此情況代表被點選的區域已記錄在導覽資訊（areaName）的陣列中
+                            // splice() 是一個 javascript 函式
+                            // 此處用來針對陣列的資料項目進行移除的動作
+                            // 它的回傳值是被移除的項目
+                            o.graphic.splice(j + 2, l);
+                            if (o.graphic.length <= 2) { // 判斷是否為第一層地圖
+                                // 設定畫面左上方導覽文字資訊的上方線條長度
+                                // 相對於第二層地圖，此長度較短
+                                o.graphic[0].children[0].shape.x2 = 60;
+                                // 設定畫面左上方導覽文字資訊的下方線條長度
+                                // 相對於第二層地圖，此長度較短
+                                o.graphic[0].children[1].shape.x2 = 60;
+                                // 取得該標記點的資訊，並將其設定為 series 標記時的資料集（data）
+                                o.series[0].data = handleEvents.initSeriesData(opt.data);
+                            };
+                            // 移除地圖導覽資訊 areaName 中的第二層地圖
+                            areaName.splice(j + 1, l);
+                            // 設定目前被點選區域的陣列（地圖導覽資訊 areaName）索引值
+                            idx = j;
+                            // 重新設定導覽資訊文字列的上下線條長度
+                            pos.leftCur -= pos.leftPlus * (l - j - 1);
+                        };
+                        o.geo.map = n; // 要重繪的地圖名稱，改為被點選的區域名稱
+                        o.geo.zoom = 0.4; // 設定地圖的縮放比例
+                        i.clear(); // 清除現有的地圖物件（新地圖時再新建物件）
+                        i.setOption(o); // 重新套用配置選項
+                        this.zoomAnimation(); // 執行自訂的動畫函式
+                        opt.callback(n, o, i); // 呼叫自行定義的回呼函式（目前函式內沒有作用）
+                    },
+
+                    /**
+                     * name：地圖名稱
+                     **/
+                    createBreadcrumb: function(name) {
+                        // 宣告中英對照的詞彙
+                        var cityToPinyin = {
+                            "彰化縣": "Changhua",
+                            "嘉義縣": "Chiayi",
+                            "嘉義市": "ChiayiCity",
+                            "新竹縣": "Hsinchu",
+                            "新竹市": "HsinchuCity",
+                            "花蓮縣": "Hualien",
+                            "高雄市": "Kaohsiung",
+                            "基隆市": "Keelung",
+                            "金門縣": "Kinmen",
+                            "連江縣": "Lienchiang",
+                            "苗栗縣": "Miaoli",
+                            "南投縣": "Nantou",
+                            "新北市": "NewTaipei",
+                            "澎湖縣": "Penghu",
+                            "屏東縣": "Pingtung",
+                            "臺中市": "Taichung",
+                            "臺南市": "Tainan",
+                            "臺北市": "Taipei",
+                            "臺東縣": "Taitung",
+                            "桃園市": "Taoyuan",
+                            "宜蘭縣": "Yilan",
+                            "雲林縣": "Yunlin"
+                        };
+
+                        // 此物件用來設定與「左上方導覽文字」相關的資訊
+                        var breadcrumb = {
+                            type: 'group',
+                            id: name,
+                            left: pos.leftCur + pos.leftPlus,
+                            top: pos.top + 3,
+                            children: [ // 共包含三個物件：(1) 層級間的「〉」符號
+                                // (2) 區域中文名稱；(3) 區域英文名稱
+                                { // 此物件設定層級間「〉」符號的相關配置
+                                    type: 'polyline',
+                                    left: -90,
+                                    top: -5,
+                                    shape: { // 繪製出層級間的「〉」符號
+                                        points: lineAmongLevel
+                                    },
+                                    style: {
+                                        stroke: '#fff',
+                                        // 利用 key 屬性記錄區域的中文名稱（在 click 事件中使用）
+                                        key: name
+                                    },
+                                    onclick: function() { // 建立 click 事件
+                                        // 取得被點擊的區域「中文名稱」
+                                        var name = this.style.key;
+                                        // 依取得的區域名稱，呼叫 resetOption() 函式重繪地圖
+                                        handleEvents.resetOption(chart, option, name);
+                                    }
+                                }, { // 此物件設定「區域中文名稱」的相關配置
+                                    type: 'text',
+                                    left: -68,
+                                    top: 'middle',
+                                    style: {
+                                        text: name, // 顯示被點擊區域的中文名稱
+                                        textAlign: 'center',
+                                        fill: style.textColor,
+                                        font: style.font
+                                    },
+                                    onclick: function() { // 建立 click 事件
+                                        // 取得被點擊的區域名稱
+                                        var name = this.style.text;
+                                        // 依取得的區域名稱，呼叫 resetOption() 函式重繪地圖
+                                        handleEvents.resetOption(chart, option, name);
+                                    }
+                                }, { // 此物件設定「區域英文名稱」的相關配置
+                                    type: 'text',
+                                    left: -68,
+                                    top: 10,
+                                    style: {
+                                        // 利用 name 屬性記錄區域的中文名稱（在 click 事件中使用）
+                                        name: name,
+                                        // 顯示被點擊區域的「英文名稱」
+                                        // 若有找到該區域英文名稱，則將它們轉成大寫字母；否則，為空白
+                                        text: cityToPinyin[name] ? cityToPinyin[name].toUpperCase() : '',
+                                        textAlign: 'center',
+                                        fill: style.textColor,
+                                        font: '12px "Microsoft YaHei", sans-serif'
+                                    },
+                                    onclick: function() {
+                                        // 取得被點擊的區域「中文名稱」
+                                        var name = this.style.name;
+                                        // 依取得的區域名稱，呼叫 resetOption() 函式重繪地圖
+                                        handleEvents.resetOption(chart, option, name);
+                                    }
+                                }
+                            ]
+                        };
+                        //                        console.log(breadcrumb);
+                        pos.leftCur += pos.leftPlus;
+
+                        return breadcrumb;
+                    },
+
+                    // 對於要進行標記的座標點，用來產生其相關資訊
+                    initSeriesData: function(data) {
+                        var temp = [];
+                        // 對於每一筆傳入的資料（data），逐一讀取其資訊
+                        // 同時，進一步組合成標記時會使用到的資訊物件
+                        for (var i = 0; i < data.length; i++) {
+                            // 依標記點的名稱（name）取得其經緯度座標位置
+                            var geoCoord = geoCoordMap[data[i].name];
+                            if (geoCoord) { // 若是該標記點有經緯度資料
+                                // 利用 push() 函式，將物件加入 temp 陣列中
+                                temp.push({ // 建立一個物件，包含二項屬性（name和value）
+                                    // 此處 name 屬性的值，為標記點的名稱（data[i].name）
+                                    name: data[i].name,
+                                    // 此處 value 屬性值，包含經緯度、data[i].value 和 data[i].level）
+                                    // 共有 4 項資料：經度、緯度、value、level
+                                    value: geoCoord.concat(data[i].value, data[i].level)
+                                });
+                            }
+                        };
+                        // 回傳包含所有標記點（已組合好資訊）的陣列
+                        return temp;
+                    },
+
+                    // 此函式主要用來產生地圖切換時的縮放及動畫
+                    zoomAnimation: function() {
+                        var count = null;
+                        var zoom = function(per) {
+                            if (!count)
+                                count = per;
+                            count = count + per;
+                            // console.log(per,count);
+                            chart.setOption({
+                                geo: {
+                                    zoom: count
+                                }
+                            });
+                            if (count < 1)
+                                // equestAnimationFrame() 函式解決了，瀏覽器不知道javascript動畫什麼時候開始、
+                                // 以及不知道最佳迴圈間隔時間的問題。
+                                // 它是跟著瀏覽器的繪製走的，如果瀏覽器繪製間隔是16.7ms，它就按這個間隔繪製；
+                                // 如果瀏覽器繪製間隔是10ms, 它就按10ms繪製。
+                                window.requestAnimationFrame(function() {
+                                    zoom(0.2);
+                                });
+                        };
+                        window.requestAnimationFrame(function() {
+                            zoom(0.2);
+                        });
+                    }
+                };
+
+                // 設定要繪製地圖的配置選項
+                var option = {
+                    backgroundColor: opt.bgColor, // 繪製圖形的背景顏色
+                    graphic: [ // 此 graphic 用來記錄繪製左上角導覽資訊所需的配置
+                        // 例如，導覽區域的中英文名稱、上下兩條線、區域間的「〉」符號
+                        { // 此物件用來建立左上方導覽文字的上下兩條線
+                            type: 'group',
+                            left: pos.left,
+                            top: pos.top - 4,
+                            children: [{ // 此物件設定左上方導覽文字「上方」的線條
+                                type: 'line',
+                                left: 0,
+                                top: -20,
+                                shape: {
+                                    x1: 0,
+                                    y1: 0,
+                                    x2: 60,
+                                    y2: 0
+                                },
+                                style: {
+                                    stroke: style.lineColor
+                                }
+                            }, { // 此物件設定左上方導覽文字「下方」的線條
+                                type: 'line',
+                                left: 0,
+                                top: 20,
+                                shape: {
+                                    x1: 0,
+                                    y1: 0,
+                                    x2: 60,
+                                    y2: 0
+                                },
+                                style: {
+                                    stroke: style.lineColor
+                                }
+                            }]
+                        }, {
+                            id: areaName[idx],
+                            type: 'group',
+                            left: pos.left + 2,
+                            top: pos.top + 3,
+                            children: [
+                                { // 此物件記錄左上方第一層導覽文字的「中文名稱」相關資訊
+                                    type: 'text',
+                                    left: 0,
+                                    top: 'middle',
+                                    style: {
+                                        text: areaName[0],
+                                        textAlign: 'center',
+                                        fill: style.textColor,
+                                        font: style.font
+                                    },
+                                    onclick: function() {
+                                        // 點擊「台南市」文字，將會觸發 resetOption() 函式
+                                        handleEvents.resetOption(chart, option, '台灣');
+                                    }
+                                }, { // 此物件記錄左上方第一層導覽文字的「英文名稱」相關資訊
+                                    type: 'text',
+                                    left: 0,
+                                    top: 10,
+                                    style: {
+                                        text: 'Taiwan', // 第一層地圖的英文名稱
+                                        textAlign: 'center',
+                                        fill: style.textColor,
+                                        font: '12px "Microsoft YaHei", sans-serif',
+                                    },
+                                    onclick: function() {
+                                        // 點擊「Tainan」文字，將會觸發 resetOption() 函式
+                                        handleEvents.resetOption(chart, option, '台灣');
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    geo: { // 宣告一個地圖座標系組件
+                        map: opt.mapName, // 要使用/繪製的地圖名稱
+                        roam: true,
+                        zoom: 1, // 當前視角的縮放比例
+                        label: { // 圖形上的文字標籤
+                            normal: { // 正常顯示時的樣式設定
+                                show: true,
+                                textStyle: {
+                                    color: '#fff'
+                                }
+                            },
+                            emphasis: { // 強調時（ex. 滑鼠移入）的樣式設定
+                                textStyle: {
+                                    color: '#fff'
+                                }
+                            }
+                        },
+                        itemStyle: { // 地圖區域的圖形樣式設定
+                            normal: {
+                                borderColor: 'rgb(181, 189, 201)',
+                                borderWidth: 1,
+                                areaColor: {
+                                    type: 'radial',
+                                    x: 0.5,
+                                    y: 0.5,
+                                    r: 0.8,
+                                    colorStops: [{
+                                        offset: 0,
+                                        color: 'rgba(147, 235, 248, 0)' // 0% 處的顏色
+                                    }, {
+                                        offset: 1,
+                                        color: 'rgba(147, 235, 248, .2)' // 100% 處的顏色
+                                    }],
+                                    globalCoord: false // 缺區為 false
+                                },
+                                shadowColor: 'rgba(128, 217, 248, 1)',
+                                shadowOffsetX: -2,
+                                shadowOffsetY: 2,
+                                shadowBlur: 10
+                            },
+                            emphasis: {
+                                areaColor: '#389BB7',
+                                borderWidth: 0
+                            }
+                        },
+                        // regions：在地圖中對特定的區域配置樣式
+                        // 在此範例中，並沒有明顯的作用
+                        regions: opt.activeArea.map(function(item) {
+                            if (typeof item !== 'string') {
+                                return {
+                                    name: item.name,
+                                    itemStyle: {
+                                        normal: {
+                                            areaColor: item.areaColor || '#389BB7'
+                                        }
+                                    },
+                                    label: {
+                                        normal: {
+                                            show: item.showLabel,
+                                            textStyle: {
+                                                color: '#fff'
+                                            }
+                                        }
+                                    }
+                                };
+                            } else {
+                                return {
+                                    name: item,
+                                    itemStyle: {
+                                        normal: {
+                                            borderColor: '#91e6ff',
+                                            areaColor: '#389BB7'
+                                        }
+                                    }
+                                };
+                            }
+                        })
+                    },
+                    series: [{ // effectScatter：帶有漣漪特效動畫的散點（氣泡）圖
+                        type: 'effectScatter',
+                        coordinateSystem: 'geo',
+                        //                             symbol: 'diamond',   // 此為菱形圖案
+                        showEffectOn: 'render',
+                        rippleEffect: {
+                            period: 15,
+                            scale: 6,
+                            brushType: 'fill'
+                        },
+                        hoverAnimation: true,
+                        itemStyle: {
+                            normal: {
+                                color: function(params) {
+                                    // 以 value[3] 的值去選取要套用的顏色
+                                    return levelColorMap[params.value[3]];
+                                },
+                                shadowBlur: 10,
+                                shadowColor: '#333'
+                            }
+                        },
+                        // 此部份設定要進行標記的座標點資料
+                        data: handleEvents.initSeriesData(opt.data)
+                    }]
+                };
+
+                // 設定圖表的配置項及數據
+                chart.setOption(option);
+
+                // 添加地圖點擊事件的處理函式
+                chart.on('click', function(params) {
+                    var _self = this;
+                    // 假如被點擊的區域（or 地圖），與目前顯示的區域不同時
+                    if (opt.goDown && params.name !== areaName[idx]) {
+                        // 進一步判斷，被點擊的區域名稱，是否有相對應的 geojson 地圖檔
+                        if (cityMap[params.name]) {
+                            // 取得 geojson 地圖檔的檔名（可能含路徑資訊）
+                            var url = cityMap[params.name];
+                            // 利用 ajax 方式去讀取該 geojson 地圖檔的內容進行處理
+                            $.get(url, function(response) {
+                                // 記錄所讀取的 geojson 地圖檔資訊（此範例沒有進一步使用此變數）
+                                curGeoJson = response;
+                                // 對於被點擊的區域，註冊成目前可用的地圖
+                                echarts.registerMap(params.name, response);
+                                // 呼叫 resetOption() 函式，進行地圖版面的重新繪製
+                                handleEvents.resetOption(_self, option, params.name);
+                                //將變數更換為目前所在地區
+                                city = params.name;
+                            });
+                        }
+                    }
+                });
+                chart.on('dblclick', function(params) {
+                    // var _self = this;
+                    var district = params.name; ///雙擊抓取行政區名稱
+                    // console.log(district);
+                    $("#district").html(city + " " + district + " 醫院資料");
+                    $("#hospitalList").html("");
+                    $("#hospitalList").append("<tr><th class='col-lg-2 col-sm-2' style='width:150px';>醫院名稱</th><th class='col-lg-3 col-sm-3'>地址</th><th class='col-lg-2 col-sm-2'>電話</th><th class='col-lg-6 col-sm-5' style='width:800px;'>營業時間</th></tr>");
+                    var name = [],
+                        add = [],
+                        phone = [],
+                        time = [];
+
+                        $.ajax({
+                            url: "map/",
+                            method: 'POST',
+                            data: {
+                                district: district,
+                            },
+                            async: false,
+                            // dataType: "json"
+                            success: function(response) {
+                                // console.log(response)
+                                var n = response.split(",");
+                                if (response == '') {
+                                    $("#hospitalList").html("此區暫時沒有資料！");
+                                } else {
+                                    for (var i = 0; n.length > i; i = i+7) {
+                                        console.log(n[i])    
+                                        name.push(n[i].replace(/"/g,""));
+                                        add.push(n[i + 3].replace(/"/g,""));
+                                        phone.push(n[i + 4].replace(/"/g,""));
+                                        time.push(n[i + 5].replace(/"/g,""))
+                                        // time.push(n[i + 5] + n[i + 6] + n[i + 7] + n[i + 8] + n[i + 9] + n[i + 10] + n[i + 11] + n[i + 12] + n[i + 13] + n[i + 14]);
+                                        $("#hospitalList").append("<tr><td>" + name + "</td><td>" + add + "</td><td>"+ phone + "</td><td>" + time + "</td></tr>");
+    
+                                        name.pop();
+                                        add.pop();
+                                        phone.pop();
+                                        time.pop();
+                                }
+                            }
+                        },
+                        error: function(textStatus) {
+                            console.log(" error!");
+                        }
+                    })
+
+                });
+
+             
+                return chart;
+            };
+
+            $.getJSON(taiwan, function(geoJson) {
+                // registerMap() 函式：註冊可用的地圖
+                // 第一個參數：註冊的地圖名稱（作為之後在 geo 或 map 組件中呼叫使用）
+                //              在 geo 或 map 組件中的 map 屬性值即是對應至此值
+                // 第二個參數：geoJson 格式的資料
+                echarts.registerMap('台灣', geoJson);
+
+                // 此處呼叫自行定義的 extendsMap() 函式。它有二個參數
+                // 第一個參數：要繪製地圖的元素 id
+                // 第二個參數：地圖的相關屬性選項設定（option）
+                echarts.extendsMap('chartMap', {
+                    bgColor: '#06182d', // 畫布背景顏色
+                    mapName: '台灣', // 要使用/繪製的地圖名稱
+                    goDown: true, // 是否下鐵
+                    // 下鐵後的回呼函式（點擊的地圖名、實例對象option、實例對象）
+                    // 此目的能提供：當點擊某一區時，可以利用此回呼函式去顯示該區的地圖
+                    callback: function(name, option, instance) {
+                        // console.log(name, option, instance);
+                    },
+                });
+            });
+        </script>
+    </div>
+    </section>
+    <section class="page-section" id="graphPage">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="mt-0 graphTitle">圖表分析</h2>
+                <hr class="divider my-4" />
+                <p class="text-muted mb-5 graphSubtitle">點擊下拉式選單可查詢各年度數據幅度</p>
+            </div>
+        </div>
+       <div id="chartGraph" class="col-lg-8 col-sm-11"></div>
+        <div class="graph col-lg-3 col-sm-11">
+            <h4 class="text-muted">選擇各個年度及月分</h4>
+            <p class="text-muted" id="selectnum"></p>
+            <div class="graphlBox">
+                <select class="graphSelect" id='graphYear' >
+                    <option value="2020">2020年</option>
+                </select>
+                <select class="graphSelect" id='graphMonth' onchange="getData()" >
+                    <option value="1">1月</option>
+                    <option value="2">2月</option>
+                    <option value="3">3月</option>
+                    <option value="4">4月</option>
+                    <option value="5">5月</option>
+                    <option value="6">6月</option>
+                    <option value="7">7月</option>
+                    <option value="8">8月</option>
+                    <option value="9">9月</option>
+                    <option value="10">10月</option>
+                    <option value="11">11月</option>
+                    <option value="12">12月</option>
+                </select>
+            </div>
+        </div>
+        <script>
+            var myChart = echarts.init(document.getElementById('chartGraph'));
+            var disease = [],
+                num = [],
+                year = [];
+            getData();
+
+            function getData() {
+                var year = $("#graphYear").val(), month = $("#graphMonth").val();
+                document.getElementById("selectnum").innerHTML = "目前選擇： " + year + "年" + month + "月";
+
+                //console.log("2222"); //測試用
+                /* 設定處理 ajax 請求的 php 檔案 */
+                /* 底下是利用發出 jQuery 的 ajax 請求方式去呼叫函式繪製 Google Chart
+                 * ajax 的各項屬性意義為.....
+                 * url: 代表處理 ajax 請求的檔案
+                 * type: 發出請求的方式。一般設定為 POST 或 GET
+                 * dataType: 設定從伺服器回傳查詢結果的資料格式
+                 * data: 要被送至伺服器處理的查詢字串。通常是傳送使用者輸入的查詢條件
+                 * async: 是否採用非同步(async)的方式處理。預設值是 true
+                 * success: 請求成功時所要執行的函式
+                 * error: 請求失敗時所要執行的函式
+                 */
+                var params = {
+                    month: month
+                };
+                disease = [];
+                num = [];
+                year = [];
+                //console.log(params);
+                $.ajax({
+                    url: "graph/",
+                    type: 'POST',
+                    async: false,
+                    data: params,
+                    dataType: 'json',
+                    /* 函式中的 backData 參數：伺服器回傳的查詢結果 */
+                    success: function(response) {
+                        /* console.log(response) */
+                        var n = response.split(",");
+                        if (n == "[]") {
+                            document.getElementById('main').innerHTML = "沒有資料!";
+                        } else {
+                            /* console.log(response); */
+                            /* 將伺服器回傳的查詢結果傳給 drawChart()函式進行 chart 的繪製 */
+                            for (var i = 0; i < n.length; i=i+4) {
+                                disease.push(n[i + 0].replace(/"/g,""));
+                                num.push(n[i + 1]);
+                                year.push(n[i + 3]);
+                            }
+                        }
+                    },
+                    error: function(textStatus) {
+                        console.log(" error!");
+                    }
+                })
+                return disease, num, year;
+            };
+
+            $('#graphMonth').on('change', function() {
+                myChart.setOption({
+                    xAxis: {
+                        type: 'category',
+                        data: disease,
+                        axisLabel: {
+                            interval: 0,
+                            margin: 12,
+                            rotate: 45,
+                            textStyle: {
+                                color: "#222"
+                            }
+                        },
+                    },
+
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        data: num,
+                        type: 'bar',
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true
+                                }
+                            }
+                        },
+
+                    }]
+                });
+
+            });
+
+            var option = {
+                color: ['#3398DB'],
+                title: {
+                    // text: '疾病統計',
+                    // subtext: '點擊長條圖可查詢各年度數據幅度',
+                    left: 'center',
+                    show: true
+                },
+                tooltip: {
+                    trigger: 'item',
+                    left: 'center',
+                    formatter: '{b} : {c} ',
+                    showDelay: 0, // 显示延迟，添加显示延迟可以避免频繁切换，单位ms
+                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    data: disease,
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 45,
+                        margin: 12,
+                        textStyle: {
+                            color: "#222"
+                        }
+                    },
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    data: num,
+                    type: 'bar',
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true
+                            }
+                        }
+                    },
+
+                }]
+            };
+            myChart.setOption(option);
+
+            
+            var x, i, j, l, ll, selElmnt, a, b, c;
+            /*look for any elements with the class "custom-select":*/
+            x = document.getElementsByClassName("custom-select");
+            l = x.length;
+            for (i = 0; i < l; i++) {
+                selElmnt = x[i].getElementsByTagName("select")[0];
+                ll = selElmnt.length;
+                /*for each element, create a new DIV that will act as the selected item:*/
+                a = document.createElement("DIV");
+                a.setAttribute("class", "select-selected");
+                a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+                x[i].appendChild(a);
+                /*for each element, create a new DIV that will contain the option list:*/
+                b = document.createElement("DIV");
+                b.setAttribute("class", "select-items select-hide");
+                for (j = 1; j < ll; j++) {
+                    /*for each option in the original select element,
+                    create a new DIV that will act as an option item:*/
+                    c = document.createElement("DIV");
+                    c.innerHTML = selElmnt.options[j].innerHTML;
+                    c.addEventListener("click", function(e) {
+                        /*when an item is clicked, update the original select box,
+                        and the selected item:*/
+                        var y, i, k, s, h, sl, yl;
+                        s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                        sl = s.length;
+                        h = this.parentNode.previousSibling;
+                        for (i = 0; i < sl; i++) {
+                            if (s.options[i].innerHTML == this.innerHTML) {
+                                s.selectedIndex = i;
+                                h.innerHTML = this.innerHTML;
+                                y = this.parentNode.getElementsByClassName("same-as-selected");
+                                yl = y.length;
+                                for (k = 0; k < yl; k++) {
+                                    y[k].removeAttribute("class");
+                                }
+                                this.setAttribute("class", "same-as-selected");
+                                break;
+                            }
+                        }
+                        h.click();
+                    });
+                    b.appendChild(c);
+                }
+                x[i].appendChild(b);
+                a.addEventListener("click", function(e) {
+                    /*when the select box is clicked, close any other select boxes,
+                    and open/close the current select box:*/
+                    e.stopPropagation();
+                    closeAllSelect(this);
+                    this.nextSibling.classList.toggle("select-hide");
+                    this.classList.toggle("select-arrow-active");
+                });
+            }
+
+            function closeAllSelect(elmnt) {
+                /*a function that will close all select boxes in the document,
+                except the current select box:*/
+                var x, y, i, xl, yl, arrNo = [];
+                x = document.getElementsByClassName("select-items");
+                y = document.getElementsByClassName("select-selected");
+                xl = x.length;
+                yl = y.length;
+                for (i = 0; i < yl; i++) {
+                    if (elmnt == y[i]) {
+                        arrNo.push(i)
+                    } else {
+                        y[i].classList.remove("select-arrow-active");
+                    }
+                }
+                for (i = 0; i < xl; i++) {
+                    if (arrNo.indexOf(i)) {
+                        x[i].classList.add("select-hide");
+                    }
+                }
+            }
+            /*if the user clicks anywhere outside the select box,
+            then close all select boxes:*/
+            document.addEventListener("click", closeAllSelect);
+        </script>
+    </div>
+</section>
+<!-- news-->
+<section class="page-section" id="newsPage">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="mt-0 newsTitle">相關新聞</h2>
+                <hr class="divider my-4" />
+                <p class="text-muted mb-5 newsSubtitle">以下準備了近期熱門有關皮膚疾病新聞</p>
+            </div>
+        </div>
+        <div class="newsBox col-lg-12 col-sm-12">
+            <a href="https://heho.com.tw/archives/177410" target="_blank">
+                <!-- <div class="col-lg-4 ml-auto text-center mb-5 mb-lg-0" > -->
+                <div class="newsBoxTitle">疫情宅在家狂用3C打電動也可能打出皮膚病！11種常見皮膚症狀</div>
+                <div class="newsBoxContent col-lg-6 col-sm-11">自五月中以來，全台民眾幾乎關在家，因應不能出門，使用電腦、手機的時間變得更長，不管是要購物、運動、聊天都跟3C產品有密切關係，也有不少民眾在這段時間狂打電動、玩電腦，皮膚科醫師提醒，使用 3C 產品除了要擔心用眼過度、近視外，也可能會出現皮膚症狀！</div>
+                <div class="newsBoxImg col-lg-5 col-sm-11">
+                    <img class="newsImg" src="{% static 'images\news\01.jpg' %}"></img>
+                </div>
+            </a>
+        </div>
+        <div class="newsBox col-lg-12 col-sm-12">
+            <a href="https://health.tvbs.com.tw/medical/328203" target="_blank">
+                <!-- <div class="col-lg-4 ml-auto text-center mb-5 mb-lg-0" > -->
+                <div class="newsBoxTitle">小心皮膚疹也是COVID-19症狀！醫曝尤其手腳與舌頭出現「這種」要警覺</div>
+                <div class="newsBoxContent col-lg-6 col-sm-11">這幾天台灣確診人數持續破百，很多人很焦心「現在疫情是否已達高峰？」，目前為了醫療量降載，呼籲有症狀的人才出來篩檢。但家醫師提醒，根據國外疫情資料，20%的COVID-19(新冠肺炎病毒)確診者唯一的症狀是皮膚疹，17％陽性者表示，皮膚疹是第一個出現的症狀。</div>
+                <div class="newsBoxImg col-lg-5 col-sm-11">
+                    <img class="newsImg" src="{% static 'images\news\02.jpg' %}"></img>
+                </div>
+            </a>
+        </div><div class="newsBox col-lg-12 col-sm-12">
+            <a href="https://www.healthnews.com.tw/news/article/50284" target="_blank">
+                <!-- <div class="col-lg-4 ml-auto text-center mb-5 mb-lg-0" > -->
+                <div class="newsBoxTitle">乾癬不只是皮膚病！ 未治療恐引爆心臟病、中風等35種疾病</div>
+                <div class="newsBoxContent col-lg-6 col-sm-11">根據社團法人台灣乾癬協會觀察，高達4成乾癬病友僅重視乾癬皮膚症狀，曾自行中斷治療，卻不知道乾癬屬全身性發炎疾病，若不治療，體內長期發炎，會影響全身多個重要器官，腦、心、肝、腎、眼都恐遭殃！</div>
+                <div class="newsBoxImg col-lg-5 col-sm-11">
+                    <img class="newsImg" src="{% static 'images\news\03.jpg' %}"></img>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+<!-- Footer-->
+<footer class="bg-light py-5">
+    <div class="container">
+        <div class="small text-center text-muted">
+            Copyright &copy;
+            <!-- This script automatically adds the current year to your website footer-->
+            <!-- (credit: https://updateyourfooter.com/)-->
+            <script>
+                document.write(new Date().getFullYear());
+            </script>
+            - 鄭品榕、郭宇晴、羅盛軒、黃怡瑄、蔡智惟
+        </div>
+    </div>
+</footer>
+
+</body>
+<script>
+/*!
+ * Start Bootstrap - Creative v6.0.5 (https://startbootstrap.com/theme/creative)
+ * Copyright 2013-2021 Start Bootstrap
+ * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-creative/blob/master/LICENSE)
+ */
+(function($) {
+    "use strict"; // Start of use strict
+
+    // Smooth scrolling using anime.js
+    $('a.js-scroll-trigger[href*="#"]:not([href="#"])').on('click', function() {
+        if (location.pathname.replace(/^\//, "") == this.pathname.replace(/^\//, "") && location.hostname == this.hostname) {
+            var target = $(this.hash);
+            target = target.length ?
+                target :
+                $("[name=" + this.hash.slice(1) + "]");
+            if (target.length) {
+                anime({
+                    targets: 'html, body',
+                    scrollTop: target.offset().top - 72,
+                    duration: 1000,
+                    easing: 'easeInOutExpo'
+                });
+                return false;
+            }
+        }
+    });
+
+    // Closes responsive menu when a scroll trigger link is clicked
+    $('.js-scroll-trigger').click(function() {
+        $('.navbar-collapse').collapse('hide');
+    });
+
+    // Activate scrollspy to add active class to navbar items on scroll
+    $('body').scrollspy({
+        target: '#mainNav',
+        offset: 75
+    });
+
+    // Collapse Navbar
+    var navbarCollapse = function() {
+        if ($("#mainNav").offset().top > 100) {
+            $("#mainNav").addClass("navbar-scrolled");
+        } else {
+            $("#mainNav").removeClass("navbar-scrolled");
+        }
+    };
+    // Collapse now if page is not at top
+    navbarCollapse();
+    // Collapse the navbar when page is scrolled
+    $(window).scroll(navbarCollapse);
+
+    // Magnific popup calls
+    $('#portfolio').magnificPopup({
+        delegate: 'a',
+        type: 'image',
+        tLoading: 'Loading image #%curr%...',
+        mainClass: 'mfp-img-mobile',
+        gallery: {
+            enabled: true,
+            navigateByImgClick: true,
+            preload: [0, 1]
+        },
+        image: {
+            tError: '<a href="%url%">The image #%curr%</a> could not be loaded.'
+        }
+    });
+
+    //upload img and show
+    document.querySelector('#file').onchange = function() {
+        if (this.files.length) {
+            let file = this.files[0];
+            let reader = new FileReader();
+            //新建 FileReader 对象
+            reader.onload = function() {
+                // 当 FileReader 读取文件时候，读取的结果会放在 FileReader.result 属性中
+                document.querySelector('#uploadImg').src = this.result;
+                // document.querySelector('#uploadImg').innerHTML = this.result;
+            };
+            // 设置以什么方式读取文件，这里以base64方式
+            reader.readAsDataURL(file);
+        }
+    };
+    //readload the photo and button style
+   
+})(jQuery); // End of use strict
+</script>
+<!-- Bootstrap core JS-->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Third party plugin JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+<!-- Core theme JS-->
+<script src="{% static 'js/final.js' %}"></script>
+<!-- <script src="js/upload.js"></script> -->
+</html>

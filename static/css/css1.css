@@ -1,0 +1,258 @@
+            /* **************************************************************************** */
+            /* service                                                                      */
+            /* **************************************************************************** */
+
+            #uploadImg {
+                z-index: -1;
+                width: 95%;
+                height: 500px;
+                border: 3px solid #CE836C;
+                border-radius: 15px;
+            }
+
+            #file {
+                margin-top: 15px;
+            }
+
+            .title-h2 {
+                color: #008C9E;
+                font-weight: bold;
+                padding: 15px;
+            }
+
+            .title-h3 {
+                color: #008C9E;
+                font-weight: bold;
+                padding: 5px;
+                size: 30px;
+            }
+
+            .title-p {
+                color: #008C9E;
+                /* font-weight: bold; */
+            }
+
+            #uploadBtn,
+            #cameraBtn {
+                /* margin-top: 15px; */
+                /* background-color: #6AB1A8; */
+                /* opacity: 0.5; */
+            }
+
+            .btn {
+                text-align: center;
+                margin: 15px 5px 0px 5px;
+                width: 45%;
+            }
+
+            .resultBox,
+            .resultBoxProcess {
+                color: #008C9E;
+                font-weight: bold;
+                width: 80%;
+                height: 70px;
+                margin: 20px;
+                border: 2px #CE836C dashed;
+                border-radius: 15px;
+                line-height: 70px;
+                padding-left: 30px;
+                cursor: pointer;
+                display: inline-block;
+            }
+
+            .resultBoxOther {
+                overflow: scroll;
+                overflow-x: hidden;
+                height: 430px;
+            }
+
+            .resultBox i {
+                color: #CE836C;
+                font-weight: bold;
+                padding-right: 10%;
+                float: right;
+            }
+
+            .resultBox:hover {
+                background-color: #e2f3f1;
+                border: 4px #CE836C dashed;
+            }
+
+            #resultDiv {
+                visibility: hidden;
+                overflow: hidden;
+                /* visibility: inherit; */
+            }
+
+            #backBtn {
+                float: left;
+                bottom: 0px;
+                position: absolute;
+            }
+
+            /* #resultChoose {
+                visibility: hidden;
+            } */
+
+            /* **************************************************************************** */
+            /* news                                                                         */
+            /* **************************************************************************** */
+
+            .newsTitle {
+                font-size: 50px;
+                font-weight: bolder;
+            }
+
+            .newsSubtitle {
+                font-size: 20px;
+                /* font-weight: bolder; */
+            }
+
+            .newsBox {
+                width: 80%;
+                /* height: 200px; */
+                border: 2px solid #e8e3e3;
+                border-radius: 10px;
+                margin: 25px;
+                text-overflow: ellipsis;
+            }
+
+            .newsBoxTitle {
+                font-size: 25px;
+                font-weight: bold;
+                margin-top: 8px
+            }
+
+            .newsBoxContent {
+                display: inline-block;
+                width: 80%;
+                height: 50px;
+                margin: 15px 10px 10px 0px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .newsImg {
+                width: 100%;
+                height: 100%;
+                /* right: 0px;
+            top: 0px; */
+                position: relative;
+            }
+
+            .newsBoxImg {
+                display: inline-block;
+                margin: 15px 10px 10px 10px;
+                /* padding-top: 20px; */
+                top: 0px;
+                position: relative;
+            }
+
+            .newsBox>a {
+                color: gray;
+            }
+
+            .newsBox>a:hover {
+                color: #008C9E;
+                text-decoration: none;
+            }
+
+            .newsBox>a:visited {
+                /* color: #CE836C; */
+                text-decoration: none;
+            }
+
+            /* **************************************************************************** */
+            /* map                                                                         */
+            /* **************************************************************************** */
+
+            .mapTitle {
+                font-size: 50px;
+                font-weight: bolder;
+            }
+
+            .mapSubtitle {
+                font-size: 20px;
+            }
+
+            #chartMap {
+                width: 650px;
+                height: 600px;
+                display: inline-block;
+            }
+
+            .hospital {
+                display: inline-block;
+                /* border: 1px solid; */
+                color: #6c757d;
+                vertical-align: top;
+                overflow: scroll;
+                /* overflow-x: hidden; */
+                height: 600px;
+                width: 100%;
+            }
+
+            #district {
+                margin: 10px 0px 10px 5px;
+                font-weight: bold;
+            }
+
+            #hospitalList {
+                border: #6c757d 1px solid;
+                border-collapse: collapse;
+                width: 150%;
+            }
+
+            #hospitalList td,
+            th {
+                border: #6c757d 1px solid;
+            }
+
+           /* **************************************************************************** */
+            /* graph                                                                         */
+            /* **************************************************************************** */
+            
+            .graphTitle {
+                font-size: 50px;
+                font-weight: bolder;
+            }
+            
+            .graphSubtitle {
+                font-size: 20px;
+            }
+            
+            #chartGraph {
+                width: 800px;
+                height: 650px;
+                display: inline-block;
+                margin-top: 20px;
+            }
+            
+            .graph {
+                display: inline-block;
+                color: #6c757d;
+                vertical-align: top;
+                margin-top: 25px;
+            }
+            
+            .graphSelect {
+                font-size: 18px;
+                background: #9BCECA;
+                color: #fafafa;
+                margin: 15px;
+                width: 300px;
+                height: 3em;
+                padding: 8px;
+                position: relative;
+                border-radius: 5px;
+                appearance: none;
+                -moz-appearance: none;
+                -webkit-appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M7%2010l5%205%205-5z%22%2F%3E%3C%2Fsvg%3E"), linear-gradient(#85b1ad, #85b1ad);
+                background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M7%2010l5%205%205-5z%22%2F%3E%3C%2Fsvg%3E"), -webkit-linear-gradient(#85b1ad, #85b1ad);
+                background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M7%2010l5%205%205-5z%22%2F%3E%3C%2Fsvg%3E"), -moz-linear-gradient(#85b1ad, #85b1ad);
+                background-position: right 0.5em top 50%, 0 0;
+                background-size: contain, cover;
+                background-repeat: no-repeat, repeat;
+            }
